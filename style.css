@@ -1,0 +1,40 @@
+.container {
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    "personal game best";
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  background-color: #3a3a3a;
+  color: white;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+header {
+  grid-area: header;
+  font-size: 2rem;
+  border-bottom: 2px solid white;
+}
+
+.personal-runs {
+  grid-area: personal;
+  background: #ddd;
+  color: black;
+  padding: 1rem;
+}
+
+.game-board {
+  grid-area: game;
+  background: #ddd;
+  padding: 1rem;
+  
+}
+
+.best-runs {
+  grid-area: best;
+  background: #ddd;
+  color: black;
+  padding: 1rem;
+}

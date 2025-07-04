@@ -28,8 +28,10 @@ header {
 .game-board {
   grid-area: game;
   background: #ddd;
-  padding: 1rem;
-  
+  display: flex;
+  justify-content: center; 
+  align-items: center;    
+  background: #ddd;
 }
 
 .best-runs {
@@ -37,4 +39,8 @@ header {
   background: #ddd;
   color: black;
   padding: 1rem;
+}
+
+.gameCanvas {
+ justify-self: center;
 }

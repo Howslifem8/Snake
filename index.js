@@ -1,21 +1,19 @@
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+var cellSize = 25;
+var rows = 27;
+var cols = 27;
+var canvas;
+var ctx;
 
-const cellSize = 20;
-const rows = canvas.height / cellSize;
-const cols = canvas.width / cellSize;
+window.onload = function() {
+  canvas = document.getElementById("gameCanvas");
+  canvas.height = rows * cellSize;
+  canvas.width = cols * cellSize;
+  ctx = canvas.getContext("2d");
 
-// Draw grid
-ctx.strokeStyle = "#ccc";
-for (let x = 0; x <= cols; x++) {
-  ctx.beginPath();
-  ctx.moveTo(x * cellSize, 0);
-  ctx.lineTo(x * cellSize, canvas.height);
-  ctx.stroke();
+  update(); 
 }
-for (let y = 0; y <= rows; y++) {
-  ctx.beginPath();
-  ctx.moveTo(0, y * cellSize);
-  ctx.lineTo(canvas.width, y * cellSize);
-  ctx.stroke();
+
+function update() {
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 }

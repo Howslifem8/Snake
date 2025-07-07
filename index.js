@@ -20,8 +20,15 @@ var velocityY = 0;
 //Snake body
 var snakeBody = [];
 
+//Score 
+let score = 0;
+
 //Game Over Dictator 
 var gameOver = false;
+
+//Game run Time 
+let startTime;
+
 
 //Game loop
 window.onload = function() {
@@ -29,11 +36,12 @@ window.onload = function() {
   canvas.height = rows * cellSize;
   canvas.width = cols * cellSize;
   ctx = canvas.getContext("2d");
+  startTime = Date.now();
 
   
 
   placeFood();
-  document.addEventListener("keyup", changeDirection);
+  document.addEventListener("keydown", changeDirection, { passive: false });
   setInterval(update, 1000/10); //10 frames per second
 }
 
@@ -53,8 +61,11 @@ function update() {
 
   if(snakeX === foodX && snakeY === foodY) {
     snakeBody.push([foodX, foodY]); 
+    score += 1;
+    scoreDisplay();
     placeFood();
   }
+
 
   //Move Snake Body
   for (let i = snakeBody.length -1; i > 0; i--) {
@@ -74,15 +85,14 @@ function update() {
   }
  
   //game over conditions
-  if (snakeX < 0 || snakeX >= cols * cellSize || snakeY < 0 || snakeY >= rows * cellSize) {
+  if (snakeX < 0 || snakeX >= cols * cellSize || snakeY < 0 || snakeY >= rows * cellSize) { //Checks if snake is our of bounds
     gameOver = true;
-    alert("Game Over");
+    showGameOverModal();
   }
-
   for (let i =0; i < snakeBody.length; i++) {
-    if (snakeX === snakeBody[i][0] && snakeY === snakeBody[i][1]) {
+    if (snakeX === snakeBody[i][0] && snakeY === snakeBody[i][1]) { // Checks if snake collides with itself
       gameOver = true;
-      alert("Game Over");
+      showGameOverModal();
     }
   }
 
@@ -95,6 +105,9 @@ function placeFood() {
 }
 // Change direction based on key press
 function changeDirection(e) {
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
+    e.preventDefault();
+  }
   if (e.code === "ArrowUp" && velocityY !== 1) {
     velocityX = 0;
     velocityY = -1;
@@ -110,3 +123,36 @@ function changeDirection(e) {
   }
   
 }
+
+function scoreDisplay() {
+  document.getElementById("score").innerHTML = "Score: " + score;
+}
+
+function showGameOverModal() {
+  const modal = document.getElementById("gameOverModal");
+  const scoreDisplay = document.getElementById("finalScore");
+  const timeDisplay = document.getElementById("gameTime");
+
+  const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+
+  scoreDisplay.textContent = "Score: " + score;
+  timeDisplay.textContent = "Time: " + elapsedTime + "s";
+
+  modal.classList.remove("hidden");
+}
+
+document.getElementById("restartBtn").addEventListener("click", () => {
+  // Reset variables
+  snakeX = cellSize * 5;
+  snakeY = cellSize * 5;
+  velocityX = 0;
+  velocityY = 0;
+  snakeBody = [];
+  score = 0;
+  gameOver = false;
+  document.getElementById("score").textContent = "Score: 0";
+  startTime = Date.now();
+  document.getElementById("gameOverModal").classList.add("hidden");
+});
+
+

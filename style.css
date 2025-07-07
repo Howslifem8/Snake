@@ -2,7 +2,9 @@
   display: grid;
   grid-template-areas:
     "header header header"
-    "personal game best";
+    "personal game best"
+    "score score score";
+    
   grid-template-columns: 1fr 3fr 1fr;
   grid-template-rows: auto 1fr;
   height: 100vh;
@@ -29,6 +31,8 @@ header {
   grid-area: game;
   background: #ddd;
   display: flex;
+  /* grid-column: 1 auto;
+  place-items: center; */
   justify-content: center; 
   align-items: center;    
   background: #ddd;
@@ -42,5 +46,49 @@ header {
 }
 
 .gameCanvas {
+  margin-top: 2rem;
  justify-self: center;
+}
+
+.score {
+  grid-area: score;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: rgb(255, 253, 253);
+  place-items: center;
+
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  color: black;
+}
+
+.modal button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
 }

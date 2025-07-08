@@ -52,7 +52,7 @@ function update() {
   if (gameOver) {
     return;
   }
-  directionChanged = false; // Reset direction change flag at the start of each frame
+  
   //Draw Canvas
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -87,7 +87,8 @@ function update() {
   for (let i =0; i < snakeBody.length; i++) {
     ctx.fillRect(snakeBody[i][0], snakeBody[i][1], cellSize, cellSize);
   }
- 
+
+  directionChanged = false; // Reset direction change flag at the start of each frame
   //game over conditions
   if (snakeX < 0 || snakeX >= cols * cellSize || snakeY < 0 || snakeY >= rows * cellSize) { //Checks if snake is our of bounds
     gameOver = true;
@@ -100,7 +101,7 @@ function update() {
     }
   }
 
-
+  
 }
 // Placing food randomly on the board
 function placeFood() {

@@ -13,6 +13,24 @@ var snakeY = cellSize * 5;
 var foodX;
 var foodY;
 
+//Snake Speed Power up 
+let speedPowerUp = false;
+let speedPowerUpX, speedPowerUpY;
+let speedPowerUpVisible = false;
+let originalInterval = 1000 / 10; // 10 frames per second
+let speedInterval = 1000 / 20; // 20 frames per second when speed power-up is active
+let updateInterval; 
+let powerUpTimeout;
+let powerUpEnabled = true; // Flag to control power-up availability
+
+//Snake Slow Down Ability 
+let slowDownPowerUp = false;
+let slowDownPowerUpX, slowDownPowerUpY;
+let slowDownPowerUpVisible = false;
+let slowDownInterval = 1000 / 5; // 5 frames per second when slow down power-up is active
+let slowDownTimeout;
+let slowDownEnabled = true; // Flag to control slow down power-up availability
+
 //Snake Directon
 var velocityX = 0;
 var velocityY = 0;
@@ -45,7 +63,8 @@ window.onload = function() {
 
   placeFood();
   document.addEventListener("keydown", changeDirection, { passive: false });
-  setInterval(update, 1000/10); //10 frames per second
+  updateInterval = setInterval(update, originalInterval); //10 frames per second
+ 
 }
 
 function update() {
@@ -60,6 +79,17 @@ function update() {
   ctx.fillStyle = "red";
   ctx.fillRect(foodX, foodY, cellSize, cellSize);
 
+  //Draw Speed Power-Up if active
+  if (speedPowerUpVisible) {
+    ctx.fillStyle = "blue"; // Color for speed power-up
+    ctx.fillRect(speedPowerUpX, speedPowerUpY, cellSize, cellSize);
+  }
+
+  //Draw Slow Down Power-Up if active
+  if (slowDownPowerUpVisible) {
+    ctx.fillStyle = "yellow"; // Color for slow down power-up
+    ctx.fillRect(slowDownPowerUpX, slowDownPowerUpY, cellSize, cellSize);
+  }
 
  //Consuming Food
 
@@ -70,7 +100,35 @@ function update() {
     placeFood();
   }
 
+  //Check for Speed Power-Up
+  if (speedPowerUpVisible && snakeX === speedPowerUpX && snakeY === speedPowerUpY) {
+    speedPowerUp = true;
+    speedPowerUpVisible = false;
+    score += 1;
+    scoreDisplay();
+    clearInterval(updateInterval); // Clear the previous interval
+    updateInterval = setInterval(update, speedInterval); // Set new interval for faster updates
+    powerUpTimeout = setTimeout(() => {
+      speedPowerUp = false;
+      clearInterval(updateInterval);
+      updateInterval = setInterval(update, originalInterval); // Reset to original speed
+    }, 5000); // Power-up lasts for 5 seconds
+  }
 
+  //Check for Slow Down Power-Up
+  if (slowDownPowerUpVisible && snakeX === slowDownPowerUpX && snakeY === slowDownPowerUpY) {
+    slowDownPowerUp = true;
+    slowDownPowerUpVisible = false;
+    score += 1; 
+    scoreDisplay();
+    clearInterval(updateInterval); // Clear the previous interval
+    updateInterval = setInterval(update, slowDownInterval); // Set new interval for slower updates
+    slowDownTimeout = setTimeout(() => {
+      slowDownPowerUp = false;
+      clearInterval(updateInterval);
+      updateInterval = setInterval(update, originalInterval); // Reset to original speed
+    }, 5000); // Power-up lasts for 5 seconds
+  }
   //Move Snake Body
   for (let i = snakeBody.length -1; i > 0; i--) {
     snakeBody[i] = snakeBody[i-1];
@@ -107,6 +165,27 @@ function update() {
 function placeFood() {
   foodX = Math.floor(Math.random() * cols) * cellSize;
   foodY = Math.floor(Math.random() * rows) * cellSize;
+
+  //Roll for Speed power-up (10% chance) 
+  if (powerUpEnabled && Math.random() < 0.1) {
+    speedPowerUpX = Math.floor(Math.random() * cols) * cellSize;
+    speedPowerUpY = Math.floor(Math.random() * rows) * cellSize;
+    speedPowerUpVisible = true;
+  } else {
+    speedPowerUpVisible = false;
+  }
+  //Roll for Slow Down power-up (10% chance)
+  if (slowDownEnabled && Math.random() < 0.9) {
+    slowDownPowerUpX = Math.floor(Math.random() * cols) * cellSize;
+    slowDownPowerUpY = Math.floor(Math.random() * rows) * cellSize;
+    slowDownPowerUpVisible = true;
+  } else {
+    slowDownPowerUpVisible = false;
+  }
+
+
+
+
 }
 
 // Change direction based on key press

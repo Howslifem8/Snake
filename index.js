@@ -17,6 +17,9 @@ var foodY;
 var velocityX = 0;
 var velocityY = 0;
 
+//Preventing Double inputs / Reverse
+var directionChanged = false;
+
 //Snake body
 var snakeBody = [];
 
@@ -49,6 +52,7 @@ function update() {
   if (gameOver) {
     return;
   }
+  directionChanged = false; // Reset direction change flag at the start of each frame
   //Draw Canvas
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -103,23 +107,30 @@ function placeFood() {
   foodX = Math.floor(Math.random() * cols) * cellSize;
   foodY = Math.floor(Math.random() * rows) * cellSize;
 }
+
 // Change direction based on key press
 function changeDirection(e) {
+  if (directionChanged) return; // Prevent multiple direction changes in one frame
+
     if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
     e.preventDefault();
   }
   if (e.code === "ArrowUp" && velocityY !== 1) {
     velocityX = 0;
     velocityY = -1;
+    directionChanged = true;
   } else if (e.code === "ArrowDown" && velocityY !== -1) {
     velocityX = 0;
     velocityY = 1;
+    directionChanged = true;
   } else if (e.code === "ArrowLeft" && velocityX !== 1) {
     velocityX = -1;
     velocityY = 0;
+    directionChanged = true;
   } else if (e.code === "ArrowRight" && velocityX !== -1) {
     velocityX = 1;
     velocityY = 0;
+    directionChanged = true;
   }
   
 }

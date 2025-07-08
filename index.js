@@ -175,7 +175,7 @@ function placeFood() {
     speedPowerUpVisible = false;
   }
   //Roll for Slow Down power-up (10% chance)
-  if (slowDownEnabled && Math.random() < 0.9) {
+  if (slowDownEnabled && Math.random() < 0.1) {
     slowDownPowerUpX = Math.floor(Math.random() * cols) * cellSize;
     slowDownPowerUpY = Math.floor(Math.random() * rows) * cellSize;
     slowDownPowerUpVisible = true;

@@ -1,3 +1,16 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* Prevents all scrolling */
+}
+
+/* Reset + box sizing for layout sanity */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+
 .container {
   display: grid;
   grid-template-areas:
@@ -6,8 +19,8 @@
     "score score score";
     
   grid-template-columns: 1fr 3fr 1fr;
-  grid-template-rows: auto 1fr;
-  height: 100vh;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
   background-color: #3a3a3a;
   color: white;
   gap: 1rem;
@@ -91,4 +104,14 @@ header {
 
 .hidden {
   display: none;
+}
+
+.run-card {
+  background: rgb(173, 170, 170);
+  border-radius: 8px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: black;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  font-size: 0.9rem;
 }

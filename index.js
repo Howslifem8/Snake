@@ -1,7 +1,7 @@
 //Game board
 var cellSize = 25;
-var rows = 27;
-var cols = 27;
+var rows = 20;
+var cols = 20;
 var canvas;
 var ctx;
 
@@ -41,6 +41,10 @@ var directionChanged = false;
 //Snake body
 var snakeBody = [];
 
+//Personal Run tracking 
+localStorage.setItem("gamesPlayed", localStorage.getItem("gamesPlayed") || 0);
+//Best Run tracking 
+localStorage.setItem("bestScore", localStorage.getItem("bestScore") || 0);
 //Score 
 let score = 0;
 
@@ -64,7 +68,7 @@ window.onload = function() {
   placeFood();
   document.addEventListener("keydown", changeDirection, { passive: false });
   updateInterval = setInterval(update, originalInterval); //10 frames per second
- 
+  renderRunCards();
 }
 
 function update() {
@@ -219,6 +223,7 @@ function scoreDisplay() {
   document.getElementById("score").innerHTML = "Score: " + score;
 }
 
+//Game over Modal 
 function showGameOverModal() {
   const modal = document.getElementById("gameOverModal");
   const scoreDisplay = document.getElementById("finalScore");
@@ -232,7 +237,67 @@ function showGameOverModal() {
   modal.classList.remove("hidden");
 }
 
+function saveRun(score, time) {
+  const run = {
+    score: score,
+    time: time,
+    date: new Date().toISOString()
+  };
+
+  // === Handle Personal Runs ===
+  let personalRuns = JSON.parse(localStorage.getItem("personalRuns")) || [];
+  personalRuns.unshift(run); 
+  if (personalRuns.length > 7) personalRuns.pop(); // Keep latest 7 runs
+  localStorage.setItem("personalRuns", JSON.stringify(personalRuns));
+
+  // === Handle Best Runs ===
+  let bestRuns = JSON.parse(localStorage.getItem("bestRuns")) || [];
+  bestRuns.push(run);
+  bestRuns.sort((a, b) => b.score - a.score); // Sort by highest score
+  if (bestRuns.length > 5) bestRuns = bestRuns.slice(0, 10); // Keep top 5
+  localStorage.setItem("bestRuns", JSON.stringify(bestRuns));
+}
+
+function renderRunCards() {
+  const personalContainer = document.getElementById("personalRunsContainer");
+  const bestContainer = document.getElementById("bestRunsContainer");
+
+  personalContainer.innerHTML = ""; // Clear existing
+  bestContainer.innerHTML = "";
+
+  const personalRuns = JSON.parse(localStorage.getItem("personalRuns")) || [];
+  const bestRuns = JSON.parse(localStorage.getItem("bestRuns")) || [];
+
+  personalRuns.slice(0, 7).forEach(run => {
+    const card = document.createElement("div");
+    card.classList.add("run-card");
+    card.innerHTML = `
+      <strong>Score:</strong> ${run.score}<br>
+      <strong>Time:</strong> ${run.time}s<br>
+      <small>${new Date(run.date).toLocaleString()}</small>
+    `;
+    personalContainer.appendChild(card);
+  });
+
+  bestRuns.slice(0, 5).forEach(run => {
+    const card = document.createElement("div");
+    card.classList.add("run-card");
+    card.innerHTML = `
+      <strong>Score:</strong> ${run.score}<br>
+      <strong>Time:</strong> ${run.time}s<br>
+      <small>${new Date(run.date).toLocaleString()}</small>
+    `;
+    bestContainer.appendChild(card);
+  });
+}
+
+
+
+//Restart Game Button Hnadler 
 document.getElementById("restartBtn").addEventListener("click", () => {
+  const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+  saveRun(score, elapsedTime); // Save run before reset
+  renderRunCards();
   // Reset variables
   snakeX = cellSize * 5;
   snakeY = cellSize * 5;

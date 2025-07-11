@@ -2,7 +2,7 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; /* Prevents all scrolling */
+
 }
 
 /* Reset + box sizing for layout sanity */
@@ -114,4 +114,28 @@ header {
   color: black;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   font-size: 0.9rem;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    grid-template-areas:
+      "header"
+      "game"
+      "score"
+      "personal"
+      "best";
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .personal-runs, .best-runs {
+    padding: 0.5rem;
+  }
+  
+}
+
+@media screen and (min-width: 768px) {
+ html, body {
+  overflow: hidden; /* Prevents all scrolling */
+}
 }

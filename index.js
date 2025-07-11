@@ -6,8 +6,7 @@ var canvas;
 var ctx;
 
 //Snake head 
-var snakeX = cellSize * 5;
-var snakeY = cellSize * 5;
+var snakeX, snakeY;
 
 //Snake food 
 var foodX;
@@ -58,8 +57,9 @@ let startTime;
 //Game loop
 window.onload = function() {
   canvas = document.getElementById("gameCanvas");
-  canvas.height = rows * cellSize;
-  canvas.width = cols * cellSize;
+  setResponsiveCanvasSize(); // <== Call this
+  snakeX = cellSize * 5;
+  snakeY = cellSize * 5;
   ctx = canvas.getContext("2d");
   startTime = Date.now();
 
@@ -311,4 +311,16 @@ document.getElementById("restartBtn").addEventListener("click", () => {
   document.getElementById("gameOverModal").classList.add("hidden");
 });
 
+//Game Canvas Responsiveness
+function setResponsiveCanvasSize() {
+  const maxWidth = window.innerWidth < 768 ? window.innerWidth * 0.9 : 600;
+  const maxHeight = window.innerHeight < 768 ? window.innerHeight * 0.6 : 600;
 
+  // Choose a cell size that ensures whole cells fit in the screen
+  cellSize = 20;
+  cols = Math.floor(maxWidth / cellSize);
+  rows = Math.floor(maxHeight / cellSize);
+
+  canvas.width = cols * cellSize;
+  canvas.height = rows * cellSize;
+}

@@ -44,8 +44,6 @@ header {
   grid-area: game;
   background: #ddd;
   display: flex;
-  /* grid-column: 1 auto;
-  place-items: center; */
   justify-content: center; 
   align-items: center;    
   background: #ddd;
@@ -61,6 +59,7 @@ header {
 .gameCanvas {
   margin-top: 2rem;
  justify-self: center;
+ background: transparent;
 }
 
 .score {
